@@ -1,0 +1,215 @@
+* {
+	font-family: Arial, Helvetica, sans-serif;
+}
+p {
+    font-family: Tahoma, Verdana, sans-serif;
+}
+body {
+	background-color: #C5A5E5;
+}
+h1, h2, h3, p {
+    margin: 1em;
+}
+h1 {
+    font-size: 2.5em;
+}
+h3 {
+    font-size: 1.5em;
+}
+p {
+    font-size: 1.5em;
+}
+#navbar-top {
+	height:56px;
+	background-color: rgba(229, 165, 229, 0.5);
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	border-radius: 16px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(7.5px);
+	-webkit-backdrop-filter: blur(7.5px);
+	border: 1px solid rgba(229, 165, 229, 0.4);
+	z-index: 4;
+}
+a.button {
+    margin: 0.5em;
+    display: block;
+    background: rgba(165, 166, 229, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.5px);
+    -webkit-backdrop-filter: blur(7.5px);
+    border: 1px solid rgba(165, 166, 229, 0.4);
+    width: fit-content;
+}
+#content-flex-container {
+    margin-top: 56px;
+    height: fit-content;
+    width: calc(100% - 230px);
+    display: flex;
+    flex-direction: column;
+
+}
+#starpics-flex-container {
+    margin-top: 100px;
+    height: fit-content;
+    width: calc(100% - 230px);
+    display: flex;
+    flex-direction: column;
+
+}
+.starpics{
+    display: block;
+    width: 50%;
+}
+.contents {
+    margin: 0.5em;
+	background: rgba(162, 216, 177, 0.5);
+	border-radius: 16px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(7.5px);
+	-webkit-backdrop-filter: blur(7.5px);
+	border: 1px solid rgba(162, 216, 177, 0.4);
+    width: fit-content;
+}
+#content2, #content3 {
+    max-width: 55em;
+}
+#navbar-right {
+	height: 100%;
+	width: 230px;
+	position: fixed !important;
+	top: 0;
+	right: 0;
+	z-index: 1;	
+	background: rgba(165, 166, 229, 0.5);
+	border-radius: 16px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(7.5px);
+	-webkit-backdrop-filter: blur(7.5px);
+	border: 1px solid rgba(165, 166, 229, 0.4);
+}
+
+.areaofanims {
+	background: #C5A5E5;
+	background: linear-gradient(90deg, #C5A5E5, #B1A2D8);
+	background: -webkit-linear-gradient(to right, #C5A5E5, #B1A2D8);
+    position: fixed;
+	width: 100%;
+	hight: 100vh;
+}
+
+.floatythings {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.floatythings li {
+	position: fixed;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    animation: animate 25s linear infinite;
+    bottom: -150px;
+}
+
+.floatythings li:nth-child(1){
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+
+
+.floatythings li:nth-child(2){
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+
+.floatythings li:nth-child(3){
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+
+.floatythings li:nth-child(4){
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.floatythings li:nth-child(5){
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.floatythings li:nth-child(6){
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+}
+
+.floatythings li:nth-child(7){
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+
+.floatythings li:nth-child(8){
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+
+.floatythings li:nth-child(9){
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+
+.floatythings li:nth-child(10){
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+
+
+@keyframes animate {
+
+    0%{
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+
+    100%{
+        transform: translateY(-2000px) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+
+}
