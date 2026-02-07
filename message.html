@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Clean Glass</title>
+  <style>
+    :root {
+      --glass-radius: 56px;
+      --glass-width: 360px;
+      --glass-height: 240px;
+      --rim-size: 8px;
+      --bg-url: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop');
+      --glass-x: calc(50vw - var(--glass-width)/2);
+      --glass-y: calc(50vh - var(--glass-height)/2);
+      --face-bg-size-w: 100vw;
+      --face-bg-size-h: 100vh;
+      --face-bg-pos-x: 0px;
+      --face-bg-pos-y: 0px;
+      --bevel-bg-size-w: 100vw;
+      --bevel-bg-size-h: 100vh;
+      --bevel-bg-pos-x: 0px;
+      --bevel-bg-pos-y: 0px;
+      --light-x: 50%;
+      --light-y: 50%;
+      --prism-angle: 135deg;
+      --opacity-shine: 1;
+      --opacity-prism: 1;
+    }
+
+    body {
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #333 var(--bg-url) center/cover no-repeat fixed;
+      overflow: hidden;
+      font-family: sans-serif;
+      touch-action: none;
+    }
+
+    .scene {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .glass-card {
+      position: absolute;
+      width: var(--glass-width);
+      height: var(--glass-height);
+      left: var(--glass-x);
+      top: var(--glass-y);
+      border-radius: var(--glass-radius);
+      cursor: grab;
+      box-shadow:
+        0 50px 100px -20px rgba(0, 0, 0, 0.6),
+        0 30px 60px -30px rgba(0, 0, 0, 0.4),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      will-change: left, top;
+      isolation: isolate;
+    }
+
+    .glass-card:active {
+      cursor: grabbing;
+      box-shadow:
+        0 20px 40px -10px rgba(0, 0, 0, 0.7),
+        0 15px 25px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .glass-bevel-base {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      overflow: hidden;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .glass-bevel-base::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      background-image: var(--bg-url);
+      background-repeat: no-repeat;
+      background-size: var(--bevel-bg-size-w) var(--bevel-bg-size-h);
+      background-position: var(--bevel-bg-pos-x) var(--bevel-bg-pos-y);
+      filter: blur(8px) saturate(150%) brightness(110%);
+    }
+
+    .glass-bevel-prism {
+      position: absolute;
+      inset: -50%;
+      z-index: 2;
+      pointer-events: none;
+      background: conic-gradient(from var(--prism-angle) at 50% 50%,
+          transparent 0deg,
+          rgba(0, 0, 0, 0) 110deg,
+          rgba(0, 255, 255, 1) 140deg,
+          rgba(255, 100, 255, 1) 180deg,
+          rgba(255, 220, 0, 1) 220deg,
+          rgba(0, 0, 0, 0) 250deg,
+          transparent 360deg);
+      mix-blend-mode: color-dodge;
+      opacity: var(--opacity-prism);
+      filter: blur(14px);
+      transition: opacity 0.2s;
+    }
+
+    .glass-bevel-lighting {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      z-index: 3;
+      pointer-events: none;
+      box-shadow:
+        inset 0 0 2px 1px rgba(255, 255, 255, 0.3),
+        inset 4px 4px 12px rgba(255, 255, 255, 0.7),
+        inset -4px -4px 12px rgba(255, 255, 255, 0.2);
+    }
+
+    .glass-face {
+      position: absolute;
+      top: var(--rim-size);
+      bottom: var(--rim-size);
+      left: var(--rim-size);
+      right: var(--rim-size);
+      border-radius: calc(var(--glass-radius) - var(--rim-size));
+      overflow: hidden;
+      z-index: 10;
+      background-color: rgba(255, 255, 255, 0.03);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.15),
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        inset 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-face::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      background-image: var(--bg-url);
+      background-repeat: no-repeat;
+      background-size: var(--face-bg-size-w) var(--face-bg-size-h);
+      background-position: var(--face-bg-pos-x) var(--face-bg-pos-y);
+      filter: blur(0.5px) saturate(105%);
+    }
+
+    .glass-shine {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      z-index: 20;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--light-x) var(--light-y),
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.4) 20%,
+          transparent 60%);
+      mix-blend-mode: overlay;
+      opacity: var(--opacity-shine);
+      transition: opacity 0.3s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scene">
+    <div class="glass-card" id="glass">
+      <div class="glass-bevel-base">
+        <div class="glass-bevel-prism"></div>
+        <div class="glass-bevel-lighting"></div>
+      </div>
+      <div class="glass-face"></div>
+      <div class="glass-shine"></div>
+    </div>
+  </div>
+  <script>
+    const root = document.documentElement;
+    const glass = document.getElementById('glass');
+    const MAG_FACE = 1.15;
+    const MAG_BEVEL = 1.5;
+    const IMG_WIDTH = 2000;
+    const IMG_HEIGHT = 1333;
+    const RIM_SIZE = 8;
+    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    let currentLight = { x: 0.5, y: 0.5 };
+    let glassPos = {
+      x: window.innerWidth / 2 - 180,
+      y: window.innerHeight / 2 - 120
+    };
+    let isDragging = false;
+    let dragOffset = { x: 0, y: 0 };
+    let targetOpacity = 0.8;
+    const lerp = (start, end, t) => start * (1 - t) + end * t;
+    function updateRefraction() {
+      const winW = window.innerWidth;
+      const winH = window.innerHeight;
+      const screenRatio = winW / winH;
+      const imgRatio = IMG_WIDTH / IMG_HEIGHT;
+      let bgRenderW, bgRenderH;
+      if (screenRatio > imgRatio) {
+        bgRenderW = winW;
+        bgRenderH = winW / imgRatio;
+      } else {
+        bgRenderW = winH * imgRatio;
+        bgRenderH = winH;
+      }
+      const bgOffsetX = (winW - bgRenderW) / 2;
+      const bgOffsetY = (winH - bgRenderH) / 2;
+      const glassCX = glassPos.x + glass.offsetWidth / 2;
+      const glassCY = glassPos.y + glass.offsetHeight / 2;
+      const relX = glassCX - bgOffsetX;
+      const relY = glassCY - bgOffsetY;
+      const faceLensW = bgRenderW * MAG_FACE;
+      const faceLensH = bgRenderH * MAG_FACE;
+      const faceZoomedX = relX * MAG_FACE;
+      const faceZoomedY = relY * MAG_FACE;
+      const faceW = glass.offsetWidth - (2 * RIM_SIZE);
+      const faceH = glass.offsetHeight - (2 * RIM_SIZE);
+      const faceFinalBgX = (faceW / 2) - faceZoomedX;
+      const faceFinalBgY = (faceH / 2) - faceZoomedY;
+      const bevelLensW = bgRenderW * MAG_BEVEL;
+      const bevelLensH = bgRenderH * MAG_BEVEL;
+      const bevelZoomedX = relX * MAG_BEVEL;
+      const bevelZoomedY = relY * MAG_BEVEL;
+      const bevelFinalBgX = (glass.offsetWidth / 2) - bevelZoomedX;
+      const bevelFinalBgY = (glass.offsetHeight / 2) - bevelZoomedY;
+      root.style.setProperty('--face-bg-size-w', `${faceLensW}px`);
+      root.style.setProperty('--face-bg-size-h', `${faceLensH}px`);
+      root.style.setProperty('--face-bg-pos-x', `${faceFinalBgX}px`);
+      root.style.setProperty('--face-bg-pos-y', `${faceFinalBgY}px`);
+      root.style.setProperty('--bevel-bg-size-w', `${bevelLensW}px`);
+      root.style.setProperty('--bevel-bg-size-h', `${bevelLensH}px`);
+      root.style.setProperty('--bevel-bg-pos-x', `${bevelFinalBgX}px`);
+      root.style.setProperty('--bevel-bg-pos-y', `${bevelFinalBgY}px`);
+    }
+    function handleStart(clientX, clientY) {
+      isDragging = true;
+      const rect = glass.getBoundingClientRect();
+      dragOffset.x = clientX - rect.left;
+      dragOffset.y = clientY - rect.top;
+      glassPos.x = rect.left;
+      glassPos.y = rect.top;
+      targetOpacity = 1;
+      mouse.x = clientX;
+      mouse.y = clientY;
+    }
+    function handleMove(clientX, clientY) {
+      mouse.x = clientX;
+      mouse.y = clientY;
+      if (isDragging) {
+        let newLeft = clientX - dragOffset.x;
+        let newTop = clientY - dragOffset.y;
+        glassPos.x = newLeft;
+        glassPos.y = newTop;
+        targetOpacity = 1;
+      } else {
+        targetOpacity = 1;
+      }
+    }
+    function handleEnd() { isDragging = false; }
+    glass.addEventListener('mousedown', e => handleStart(e.clientX, e.clientY));
+    window.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
+    window.addEventListener('mouseup', handleEnd);
+    glass.addEventListener('touchstart', e => {
+      e.preventDefault();
+      handleStart(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
+    window.addEventListener('touchmove', e => {
+      if (isDragging) e.preventDefault();
+      handleMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
+    window.addEventListener('touchend', handleEnd);
+    document.addEventListener('pointerleave', () => {
+      if (!isDragging) targetOpacity = 0.5;
+    });
+    window.addEventListener('resize', updateRefraction);
+    function animate() {
+      root.style.setProperty('--glass-x', `${glassPos.x}px`);
+      root.style.setProperty('--glass-y', `${glassPos.y}px`);
+      const rawLx = (mouse.x - glassPos.x) / glass.offsetWidth;
+      const rawLy = (mouse.y - glassPos.y) / glass.offsetHeight;
+      currentLight.x = lerp(currentLight.x, rawLx, 0.08);
+      currentLight.y = lerp(currentLight.y, rawLy, 0.08);
+      const dx = currentLight.x - 0.5;
+      const dy = currentLight.y - 0.5;
+      const prismDeg = (Math.atan2(dy, dx) * (180 / Math.PI)) + 90;
+      root.style.setProperty('--light-x', `${currentLight.x * 100}%`);
+      root.style.setProperty('--light-y', `${currentLight.y * 100}%`);
+      root.style.setProperty('--prism-angle', `${prismDeg}deg`);
+      root.style.setProperty('--opacity-shine', targetOpacity);
+      root.style.setProperty('--opacity-prism', targetOpacity * 0.8);
+      updateRefraction();
+      requestAnimationFrame(animate);
+    }
+    updateRefraction();
+    animate();
+  </script>
+</body>
+
+</html>
